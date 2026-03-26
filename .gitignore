@@ -1,0 +1,64 @@
+# مجلدات البناء (Build folders)
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# ملفات المشروع الخاصة بـ Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+*.pidb
+*.psess
+*.sln.docstates
+
+# ملفات التطبيق المنشور (Publish)
+publish/
+*.pubxml.user
+
+# ملفات الحزمة (Packages)
+packages/
+*.nupkg
+
+# ملفات الإعدادات المحلية
+appsettings.Development.json
+appsettings.Local.json
+*.local.json
+
+# ملفات قاعدة البيانات المحلية
+*.mdf
+*.ldf
+*.sdf
+*.db
+*.sqlite
+
+# ملفات السجلات (Logs)
+*.log
+logs/
+Logs/
+
+# ملفات مؤقتة
+*.tmp
+*.temp
+*.cache
+Thumbs.db
+desktop.ini
+
+# ملفات تعريف المستخدم
+*.userprefs
+*.csproj.user
+*.vbproj.user
+
+# ملفات الإصدار (Releases)
+*.exe
+*.dll
+!**/bin/ref/*.dll
+
+# ملفات الأداء والتشخيص
+*.vsidx
+*.coverage
+*.trx
+TestResults/
