@@ -1,7 +1,9 @@
+<img width="1366" height="768" alt="Screenshot (311)" src="https://github.com/user-attachments/assets/22eb86e6-1f09-48f2-80b5-17865fe549a2" />
 # Snake Game - Windows Forms (C#)
 
 A classic Snake game built with C# and Windows Forms, featuring multiple game modes, customizable settings, power-ups, obstacles, and a 1v1 mode (code included but not fully integrated). The project demonstrates object-oriented programming, event handling, and GDI+ graphics in a desktop environment.
 
+![Uploading Screenshot (309).png…]()
 ---
 
 ## Table of Contents
@@ -16,7 +18,7 @@ A classic Snake game built with C# and Windows Forms, featuring multiple game mo
 - [Screens](#screens)
 - [1v1 Mode (Separate Implementation)](#1v1-mode-separate-implementation)
 - [Project Structure](#project-structure)
-
+![Uploading Screenshot (310).png…]()
 ---
 
 ## Overview
@@ -30,6 +32,7 @@ This project is a complete Snake game with a polished Windows Forms interface. I
 - Power‑up items (red, yellow, blue, green) that modify the snake’s length, score, speed, or controls.
 - Obstacles (stones) that appear when certain score thresholds are reached.
 - A separate **1v1 mode** (code included but not linked to the main project) where two snakes compete on the same grid.
+<img width="1366" height="768" alt="Screenshot (311)" src="https://github.com/user-attachments/assets/ec9e4147-4a05-4bb7-b2fd-9e243d5e9e01" />
 
 ---
 
@@ -42,6 +45,9 @@ This project is a complete Snake game with a polished Windows Forms interface. I
   - `PrizesForm` – achievements or collectible info.
   - `SettingsForm` – customize game parameters.
 
+<img width="1366" height="768" alt="Screenshot (312)" src="https://github.com/user-attachments/assets/706a8f9b-3ea5-4cb2-ae24-9f98bc62b0fd" />
+
+
 - **Customizable Settings**
   - Number of food items on the field.
   - Initial snake length.
@@ -49,6 +55,9 @@ This project is a complete Snake game with a polished Windows Forms interface. I
   - Game speed.
   - Colors of food and stones.
   - Preview panel shows immediate visual feedback.
+
+<img width="1366" height="768" alt="Screenshot (313)" src="https://github.com/user-attachments/assets/787d7dc0-2395-416e-a28d-94b00c5a6b93" />
+
 
 - **Game Modes**
   - **Normal**: Snake dies when hitting the wall or its own body.
@@ -205,6 +214,8 @@ All changes are reflected instantly in the **preview panel** (a miniature game a
   - If the two heads collide head‑on, the game ends in a **draw**.
 - The implementation is separate and can be tested in a standalone project if needed.
 - Future plans may include merging this mode into the main menu.
+
+<img width="1366" height="768" alt="Screenshot (314)" src="https://github.com/user-attachments/assets/d7edee46-04b0-453d-ae36-93395785bc7b" />
 
 ---
 
