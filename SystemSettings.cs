@@ -20,29 +20,54 @@ namespace AslanSnakeGame
 {
     public class SystemSettings
     {
-        // delete initialize and add it to constructor .
-        public static String PlayerScoreFilePath = @"C:\Users\USER\Documents\ToDelete\AslanSnakeGame\GameScore.txt";
-        public static String GameSettingFilePath = @"C:\Users\USER\Documents\ToDelete\AslanSnakeGame\GameSettingFile.txt";
-        public static int NumberOfImagesInPngsFile ;
-        public static String PlayersImagesFilePath = @"C:\Users\USER\Documents\ToDelete\AslanSnakeGame\Pngs";
+        // دالة للبحث تلقائياً عن مجلد المشروع الرئيسي سواء كان .NET Framework أو .NET 6/8
+        private static string GetProjectRootPath()
+        {
+            DirectoryInfo dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+
+            while (dir != null)
+            {
+                if (File.Exists(Path.Combine(dir.FullName, "GameSettingFile.txt")) ||
+                    Directory.Exists(Path.Combine(dir.FullName, "GroundImages")))
+                {
+                    return dir.FullName;
+                }
+                dir = dir.Parent;
+            }
+
+            // مسار احتياطي في حال لم يُعثر على الملفات
+            return Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\"));
+        }
+
+        public static string ProjectRootPath = GetProjectRootPath();
+
+        public static string GameSettingFilePath = Path.Combine(ProjectRootPath, "GameSettingFile.txt");
+        public static string GameScoreFilePath = Path.Combine(ProjectRootPath, "GameScore.txt");
+        public static String PlayerScoreFilePath = Path.Combine(ProjectRootPath, "GameScore.txt");
+
+        public static int NumberOfImagesInPngsFile;
+        public static String PlayersImagesFilePath = Path.Combine(ProjectRootPath, "Pngs");
+
         public static String[] GroundImagesPath = new String[4]
-            {   @"C:\Users\USER\Documents\ToDelete\AslanSnakeGame\GroundImages\1.Png",
-                @"C:\Users\USER\Documents\ToDelete\AslanSnakeGame\GroundImages\2.Png",
-                @"C:\Users\USER\Documents\ToDelete\AslanSnakeGame\GroundImages\3.Png",
-                @"C:\Users\USER\Documents\ToDelete\AslanSnakeGame\GroundImages\4.Png"
-            };
-            
-        public static string PlayerImagePath {get; set;} = @"C:\Users\USER\Documents\ToDelete\AslanSnakeGame\PlayerImage\x.png";
-        public static DateTime GameDate {get; set;}
+        {
+            Path.Combine(ProjectRootPath, "GroundImages", "1.Png"),
+            Path.Combine(ProjectRootPath, "GroundImages", "2.Png"),
+            Path.Combine(ProjectRootPath, "GroundImages", "3.Png"),
+            Path.Combine(ProjectRootPath, "GroundImages", "4.Png")
+        };
+
+        public static string PlayerImagePath { get; set; } = Path.Combine(ProjectRootPath, "PlayerImage", "x.png");
+        public static DateTime GameDate { get; set; }
         public static PictureBox[] HomeBtnsPicBoxes = new PictureBox[6];
         public static PictureBox[] frmAreYouSureBtnsPicBoxes = new PictureBox[3];
         public static SoundPlayer SoundOfButtonFocus;
         public static SoundPlayer SoundOfButtonClick;
+        private static string focusSoundPath = Path.Combine(ProjectRootPath, "sound1.wav");
+        private static string clickSoundPath = Path.Combine(ProjectRootPath, "sound2.wav");
         private static Color FocusedButtonsForeColor { get; set; }
-        private static Color ButtonsForeColor { get; set;}
+        private static Color ButtonsForeColor { get; set; }
 
-
-        public static Boolean IsLogin {get; set;}
+        public static Boolean IsLogin { get; set; }
 
         public static int NumberTen { get; set; } = 10;
 
@@ -54,42 +79,43 @@ namespace AslanSnakeGame
             ButtonsForeColor = Color.Black;
             IsLogin = false;
             NumberOfImagesInPngsFile = GameSettingRecordContainer.NumberOfImagesInPngsFile;
-            SoundOfButtonFocus = new SoundPlayer("sound1.wav");
-            SoundOfButtonClick = new SoundPlayer("sound2.wav");
-            
+            SoundOfButtonFocus = new SoundPlayer(focusSoundPath);
+            SoundOfButtonClick = new SoundPlayer(clickSoundPath);
         }
 
         private static Color GetButtonsForeColor(bool isFocus)
         {
             return (isFocus) ? FocusedButtonsForeColor : ButtonsForeColor;
         }
+
         private static Font GetHomeButtonsFont(bool isFocus, Button B)
         {
-            short AddNumberToSize = (isFocus) ? (short)2 : (short)-2; ;
+            short AddNumberToSize = (isFocus) ? (short)2 : (short)-2;
             return new Font("Snap ITC", B.Font.Size + AddNumberToSize, FontStyle.Bold);
         }
 
-        private static void btn_UpdatePicButtons(PictureBox[] PicBoxes,bool isVisible, Button B)
+        private static void btn_UpdatePicButtons(PictureBox[] PicBoxes, bool isVisible, Button B)
         {
             short tag = Convert.ToByte(B.Tag);
-            for(int i = 1; i<=PicBoxes.Count();i++)
+            for (int i = 1; i <= PicBoxes.Count(); i++)
             {
-                if(tag == i) PicBoxes[i-1].Visible = isVisible;
+                if (tag == i) PicBoxes[i - 1].Visible = isVisible;
             }
         }
-        public static void btn_UpdateEffects(PictureBox[] PicBoxes,bool isFocus, Button B)
+
+        public static void btn_UpdateEffects(PictureBox[] PicBoxes, bool isFocus, Button B)
         {
             if (isFocus)
             {
-                SoundOfButtonFocus.Play();
+                //oundOfButtonFocus.Play();
                 B.Focus();
             }
             B.ForeColor = GetButtonsForeColor(isFocus);
             B.Font = GetHomeButtonsFont(isFocus, B);
-            btn_UpdatePicButtons(PicBoxes,isFocus, B);
+            btn_UpdatePicButtons(PicBoxes, isFocus, B);
         }
 
-        public static void btn_UpdateEffects( bool isFocus, Button B)
+        public static void btn_UpdateEffects(bool isFocus, Button B)
         {
             if (isFocus)
             {
@@ -121,19 +147,19 @@ namespace AslanSnakeGame
         public static void DrawCircle(Circle circle, Brush Color, PaintEventArgs e)
         {
             e.Graphics.FillEllipse(Color, new Rectangle(
-            circle.x * GameSettings.CircleWidth,
-            circle.y * GameSettings.CircleHeight,
-            GameSettings.CircleWidth,
-            GameSettings.CircleHeight));
+                circle.x * GameSettings.CircleWidth,
+                circle.y * GameSettings.CircleHeight,
+                GameSettings.CircleWidth,
+                GameSettings.CircleHeight));
         }
 
         public static void DrawSquare(Circle circle, Brush Color, PaintEventArgs e)
         {
             e.Graphics.FillRectangle(Color, new Rectangle(
-            circle.x * GameSettings.CircleWidth,
-            circle.y * GameSettings.CircleHeight,
-            GameSettings.CircleWidth,
-            GameSettings.CircleHeight));
+                circle.x * GameSettings.CircleWidth,
+                circle.y * GameSettings.CircleHeight,
+                GameSettings.CircleWidth,
+                GameSettings.CircleHeight));
         }
 
         public static void UpdateSnakeColor(Snake snake, PaintEventArgs e)
@@ -142,7 +168,6 @@ namespace AslanSnakeGame
             {
                 if (i == 0) DrawCircle(snake.At(i), GameSettings.SnakeHeadColor, e);
                 else DrawCircle(snake.At(i), GameSettings.SnakeBodyColor, e);
-
             }
         }
 
@@ -152,14 +177,12 @@ namespace AslanSnakeGame
             {
                 if (i == 0) DrawCircle(snake.At(i), B1, e);
                 else DrawCircle(snake.At(i), B2, e);
-
             }
-            if(snake.IsDied)
+            if (snake.IsDied)
             {
                 DrawCircle(snake.At(1), B1, e);
             }
         }
-
 
         public static void UpdateFoodsColor(Foods foods, PaintEventArgs e)
         {
@@ -187,7 +210,6 @@ namespace AslanSnakeGame
             }
         }
 
-
         public static String[] GetScoreRecords()
         {
             return File.ReadAllLines(PlayerScoreFilePath);
@@ -201,7 +223,7 @@ namespace AslanSnakeGame
                    Convert.ToString(record.Mode) + "," +
                    Convert.ToString(record.Size) + "," +
                    Convert.ToString(record.Time) + "," +
-                   record.Date + "," + 
+                   record.Date + "," +
                    record.ImagePath + Environment.NewLine;
         }
 
@@ -225,6 +247,7 @@ namespace AslanSnakeGame
             }
             return RContainers;
         }
+
         public static String CreateGameScoreRecord(String PlayerImagePath, Label lblPlayerName, int Score)
         {
             //TimeSpan difference = DateTime.Now - GameDate;
@@ -234,13 +257,14 @@ namespace AslanSnakeGame
                    Convert.ToString(GameSettings.GameMode) + "," +
                    Convert.ToString(GameSettings.GroundArea) + "," +
                    Convert.ToString(GameSettings.MatchTime) + "," +
-                   GameDate + "," + 
+                   GameDate + "," +
                    PlayerImagePath + "," +
                    Environment.NewLine;
         }
-        public static void WriteTheRecordOnTheFile(String PlayerImagePath ,Label lblPlayerName, int Score)
+
+        public static void WriteTheRecordOnTheFile(String PlayerImagePath, Label lblPlayerName, int Score)
         {
-            File.AppendAllText(PlayerScoreFilePath, CreateGameScoreRecord(PlayerImagePath ,lblPlayerName, Score));
+            File.AppendAllText(PlayerScoreFilePath, CreateGameScoreRecord(PlayerImagePath, lblPlayerName, Score));
             List<ScoreRecordContainer> records = new List<ScoreRecordContainer>();
             records = GetScoreRecordContainer();
             records.Sort();
@@ -265,19 +289,19 @@ namespace AslanSnakeGame
                    GameSettings.GroundArea + ",#" + getHexadecimal(GameSettings.SnakeHeadColor) + ",#" +
                    getHexadecimal(GameSettings.SnakeBodyColor) + ",#" + getHexadecimal(GameSettings.FoodColor) + ",#" +
                    getHexadecimal(GameSettings.BlocksColor) + "," + GameSettings.NumberToCreateBlock
-                   + "," + NumberOfImagesInPngsFile + "," + GameSettings.NumberOfFoods +","+
-                   Snake.initialSnakeLength+"," + GameSettings.TotalEatenFoods + "," +
+                   + "," + NumberOfImagesInPngsFile + "," + GameSettings.NumberOfFoods + "," +
+                   Snake.initialSnakeLength + "," + GameSettings.TotalEatenFoods + "," +
                    GameSettings.TotalTimeSpentOnGame + "," + GameSettings.BestScoreEver + "," +
-                   GameSettings.TotalMatches+","+GameSettings.TotalCoins+ "," +
+                   GameSettings.TotalMatches + "," + GameSettings.TotalCoins + "," +
                    GameSettings.ClaimedAwards + "," + GameSettings.MyItems + ",#" +
-                   getHexadecimal(new SolidBrush(GameSettings.GroundColor))+ "," +
+                   getHexadecimal(new SolidBrush(GameSettings.GroundColor)) + "," +
                    GameSettings.GroundImageIndex;
         }
 
         public static void UpdateGameSettingFileContent()
         {
             string s = CreateGameSettingRecord();
-            File.WriteAllText(GameSettingFilePath,s);
+            File.WriteAllText(GameSettingFilePath, s);
         }
 
         public static void MakeButtonPurple(Button B)
@@ -288,31 +312,35 @@ namespace AslanSnakeGame
 
         public static void UpdatePngsFile()
         {
-            string to = PlayersImagesFilePath + "\\" + NumberOfImagesInPngsFile + ".png";
+            Directory.CreateDirectory(PlayersImagesFilePath);
+            string to = Path.Combine(PlayersImagesFilePath, NumberOfImagesInPngsFile + ".png");
             GameSettings.PlayerImagePath = to;
-            File.Copy(PlayerImagePath, to, overwrite: true);
+            if (File.Exists(PlayerImagePath))
+            {
+                File.Copy(PlayerImagePath, to, overwrite: true);
+            }
         }
+
         public static int IncreaseSpeedBy()
         {
             int speed = 0;
-            if(GameSettings.GameSpeed.Equals(GameSettings.enGameSpeed.Slow))
+            if (GameSettings.GameSpeed.Equals(GameSettings.enGameSpeed.Slow))
             {
                 speed = 50;
             }
-            else if(GameSettings.GameSpeed.Equals(GameSettings.enGameSpeed.Mid))
+            else if (GameSettings.GameSpeed.Equals(GameSettings.enGameSpeed.Mid))
             {
                 speed = 30;
             }
-            else if(GameSettings.GameSpeed.Equals(GameSettings.enGameSpeed.Quick))
+            else if (GameSettings.GameSpeed.Equals(GameSettings.enGameSpeed.Quick))
             {
                 speed = 20;
-                if(GameSettings.GroundArea.Equals(GameSettings.enGroundArea.Big))
+                if (GameSettings.GroundArea.Equals(GameSettings.enGroundArea.Big))
                 {
                     speed = 5;
                 }
             }
-            return  speed;
+            return speed;
         }
-
     }
 }
